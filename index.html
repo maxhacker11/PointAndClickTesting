@@ -17,6 +17,8 @@
 
         <!-- A-FRAME SUPER HANDS -->
         <script src="https://unpkg.com/super-hands@^3.0.3/dist/super-hands.min.js"></script>
+
+        <script src="https://rawgit.com/fernandojsg/aframe-teleport-controls/master/dist/aframe-teleport-controls.min.js"></script>
     </head>
     <body>
         <a-scene physics="debug: true">
@@ -27,14 +29,19 @@
             <a-entity geometry="primitive: sphere" material="color: #fff; shader: flat;" light="type: point" scale=".5 .5 .5" position="0 5 0"></a-entity>
 
             <!-- Camera and cursor -->
-            <a-entity id="rig"
-                        movement-controls="controls: keyboard, trackpad;"
+            <a-entity id="cameraRig"
                         position="0 0 0">
-                <a-entity camera
+                
+                <!-- CAMERA -->
+                <a-entity id="head"
+                            camera
                             position="0 1.6 0"
-                            look-controls="pointerLockEnabled: true"></a-entity>
-                <a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: left"></a-entity>
-                <a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: right"></a-entity>
+                            wasd-controls
+                            look-controls></a-entity>
+
+                <!-- HANDS -->
+                <a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: left" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head;"></a-entity>
+                <a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: right" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head;"></a-entity>
             </a-entity>
 
             <!-- Floor -->
