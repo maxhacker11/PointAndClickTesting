@@ -7,99 +7,45 @@
         <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
 
         <!-- A-FRAME EXTRAS -->
-        <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@tagOrCommit/dist/aframe-extras.min.js"></script>
-        
+        <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+
         <!-- A-FRAME PHYSICS -->
-        <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v$npm_package_version/dist/aframe-physics-system.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-system@v4.2.2/dist/aframe-physics-system.min.js"></script>
+
+        <!-- A-FRAME ENVIRONMENT -->
+        <script src="js/aframe-environment-component.min"></script>
+
+        <!-- A-FRAME SUPER HANDS -->
+        <script src="https://unpkg.com/super-hands@^3.0.3/dist/super-hands.min.js"></script>
     </head>
     <body>
-        <a-scene 
-            physics
-            vr-mode-ui
-            device-orientation-permission-ui
-            renderer="colorManagement: true; 
-                        physicallyCorrectLights: true; 
-                        highRefreshRate: true; 
-                        alpha: true;">
-            
-            <a-assets>
-                <img id="boxTexture" src="./assets/side-black.png">
-            </a-assets>
-            
-            <!-- Lights -->
-            <a-light type="ambient" intensity="1.0"></a-light>
-            <a-entity 
-                light="type:directional; 
-                    castShadow:true; 
-                    color:white; 
-                    shadowMapHeight:2048;
-                    shadowMapWidth:2048;
-                    intensity:1.5" 
-                position="5 10 7"
-                shadow>
+        <a-scene physics="debug: true">
+
+            <!-- Environment -->
+            <a-entity environment="preset: checkerboard; " preset-switcher></a-entity>
+
+            <a-entity geometry="primitive: sphere" material="color: #fff; shader: flat;" light="type: point" scale=".5 .5 .5" position="0 5 0"></a-entity>
+
+            <!-- Camera and cursor -->
+            <a-entity>
+                <a-camera><a-cursor></a-cursor></a-camera>
+                <a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: left"></a-entity>
+                <a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: right"></a-entity>
             </a-entity>
-            
-            <!-- Camera -->
-            <a-camera position="0 1.5 2"></a-camera>
-            
-            <!-- Action -->
-            <a-entity 
-                id="leftController" 
-                add-cube-on-button-press
-                static-body="shape: sphere; sphereRadius: 0.05;" 
-                hand-controls="hand: left;" 
-                sphere-collider="objects: .throwable" 
-                grab>
-            </a-entity>
-            
-            <a-entity 
-                id="rightController" 
-                add-cube-on-button-press 
-                static-body="shape: sphere; sphereRadius: 0.05;" 
-                hand-controls="hand: right;" 
-                sphere-collider="objects: .throwable" 
-                grab>
-            </a-entity>
-            
-            <!-- Scene -->
-            <a-sky color="#464766"></a-sky>
-            <a-box 
-                position="0 -1 0" 
-                static-body scale="10 2 10" 
-                color="#2D2E43" 
-                shadow 
-                metalness="0.8" 
-                roughness="0.8">
-            </a-box>
-            
-            <a-box 
-                position="0 0.625 -0.67" 
-                depth="0.3" 
-                static-body 
-                scale="1.25 1.25 1.25" 
-                material="color: #9880B2" 
-                shadow>
-            </a-box>
-            
-            <a-text
-                value="Press Any Button to Spawn Cube"
-                align="center"
-                anchor="center"
-                font="exo2bold"
-                color="#000"
-                position="0 1.15 -0.475"
-                scale="0.31 0.31 0.31">
-            </a-text>
-            
-            <a-box 
-                class="throwable" 
-                dynamic-body="mass: 1" 
-                position="0.0 4.0 -0.67" 
-                scale="0.2 0.2 0.2" 
-                src="#boxTexture" 
-                color="#AD50FF" 
-                shadow>
-            </a-box>
-        </a-scene>
+
+            <!-- Floor -->
+            <a-plane static-body position="0 0 -4" rotation="-90 0 0" width="40" height="40" material="opacity: 0.0; transparent: true"></a-plane>
+
+            <!-- Box -->
+            <a-box dynamic-body hoverable grabbable stretchable draggable droppable mass="5" position="-1 5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+            <a-box dynamic-body hoverable grabbable stretchable draggable droppable mass="5" position="-1 10 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+            <a-box dynamic-body hoverable grabbable stretchable draggable droppable mass="5" position="1 10 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+
+            <!-- Sphere -->
+            <a-sphere static-body position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+
+            <!-- Sky -->
+            <a-sky color="#ECECEC"></a-sky>
+          </a-scene>
     </body>
 </html>
