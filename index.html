@@ -4,59 +4,76 @@
         <meta name="viewport" content="user-scalable=0, initial-scale=0">
 
         <!-- A-FRAME -->
-        <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+        <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
 
-        <!-- A-FRAME EXTRAS -->
-        <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+        <!-- A-FRAME PC TELEPORTATION -->
+        <script src="https://unpkg.com/aframe-cursor-teleport-component@1.0.0/dist/aframe-cursor-teleport-component.min.js"></script>
 
-        <!-- A-FRAME PHYSICS -->
-        <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-system@v4.2.2/dist/aframe-physics-system.min.js"></script>
+        <!-- A-FRAME VR TELEPORTATION -->
+        <script src="https://cdn.jsdelivr.net/gh/powersimple/aframe-teleport-controls@master/dist/aframe-teleport-controls.min.js"></script>
 
         <!-- A-FRAME ENVIRONMENT -->
         <script src="js/aframe-environment-component.min"></script>
-
-        <!-- A-FRAME SUPER HANDS -->
-        <script src="https://unpkg.com/super-hands@^3.0.3/dist/super-hands.min.js"></script>
-
-        <script src="https://rawgit.com/fernandojsg/aframe-teleport-controls/master/dist/aframe-teleport-controls.min.js"></script>
     </head>
     <body>
-        <a-scene physics="debug: true">
+        <script>
+            AFRAME.registerComponent('color-change', {
+                init: function() {
+                    this.el.addEventListener('click', function() {
+                        //set material color to random hex value
+                        var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                        this.setAttribute('material', {
+                            color: randomColor
+                        });
+                    })
+                }
+            });
+        </script>
+    
+        <a-scene cursor="rayOrigin: mouse" raycaster="objects: .clickable">
+    
+            <!-- player
+            <a-entity id="cameraRig" position="0 0 0" cursor-teleport="cameraRig: #cameraRig; cameraHead: #head; collisionEntities: .collision; ignoreEntities: .clickable">
+                <a-entity id="head" position="0 1.52 0" camera look-controls="reverseMouseDrag: true"></a-entity>
+                <a-entity laser-controls="hand: left" raycaster="objects: .clickable; far: 100" line="color: red; opacity: 0.75" teleport-controls="
+                            collisionEntities: .collision;
+                            cameraRig: #cameraRig;
+                            teleportOrigin: #head;
+                            button: thumbstick;
+                            curveShootingSpeed: 8"></a-entity>
+                <a-entity laser-controls="hand: right" raycaster="objects: .clickable" line="color: red; opacity: 0.75" teleport-controls="
+                            collisionEntities: .collision;
+                            cameraRig: #cameraRig;
+                            teleportOrigin: #head;
+                            button: thumbstick;
+                            curveShootingSpeed: 8"></a-entity>
+            </a-entity> -->
 
-            <!-- Environment -->
-            <a-entity environment="preset: checkerboard; " preset-switcher></a-entity>
-
-            <a-entity geometry="primitive: sphere" material="color: #fff; shader: flat;" light="type: point" scale=".5 .5 .5" position="0 5 0"></a-entity>
-
-            <!-- Camera and cursor -->
-            <a-entity id="cameraRig"
-                        position="0 0 0">
-                
-                <!-- CAMERA -->
-                <a-entity id="head"
-                            camera
-                            position="0 1.6 0"
-                            wasd-controls
-                            look-controls></a-entity>
-
-                <!-- HANDS -->
-                <a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: left" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head;"></a-entity>
-                <a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: right" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head;"></a-entity>
+            <!-- camera rig -->
+            <a-entity id="cameraRig" 
+            cursor-teleport="cameraRig: #cameraRig; cameraHead: #head; collisionEntities: .collision; ignoreEntities: .clickable"
+            navigator="cameraRig: #cameraRig; cameraHead: #head; collisionEntities: .collision; ignoreEntities: .clickable">
+                <a-entity id="head" position="0 1.52 0" camera look-controls="reverseMouseDrag: true"></a-entity>
+                <a-entity laser-controls="hand: left" raycaster="objects: .clickable; far: 100" line="color: red; opacity: 0.75" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head;"></a-entity>
+                <a-entity laser-controls="hand: right" raycaster="objects: .clickable" line="color: red; opacity: 0.75" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head;"></a-entity>
             </a-entity>
 
-            <!-- Floor -->
-            <a-plane static-body position="0 0 -4" rotation="-90 0 0" width="40" height="40" material="opacity: 0.0; transparent: true"></a-plane>
-
-            <!-- Box -->
-            <a-box dynamic-body hoverable grabbable stretchable draggable droppable mass="5" position="-1 5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-            <a-box dynamic-body hoverable grabbable stretchable draggable droppable mass="5" position="-1 10 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-            <a-box dynamic-body hoverable grabbable stretchable draggable droppable mass="5" position="1 10 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-
-            <!-- Sphere -->
-            <a-sphere static-body position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-
-            <!-- Sky -->
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+            <!-- scene geometry -->
+            <a-entity class="collision" position="0 -.05 0" geometry="primitive: box; width: 8; height: .1; depth: 8" material="color: #ffcc80"></a-entity>
+            <a-entity class="collision" position="2 .75 2" geometry="primitive: box; width: 2; height: .1; depth: 2" material="color: #ff1744"></a-entity>
+            <a-entity class="collision" position="2 1.5 -2" geometry="primitive: box; width: 2; height: .1; depth: 2" material="color: #80cbc4"></a-entity>
+            <a-entity class="collision" position="-2 2.25 -2" geometry="primitive: box; width: 2; height: .1; depth: 2" material="color: #9ccc65"></a-entity>
+            <a-entity class="collision" position="-2 3 2" geometry="primitive: box; width: 2; height: .1; depth: 2" material="color: #3f51b5"></a-entity>
+            <a-entity class="collision" position="-2 -1 2" geometry="primitive: sphere; radius: 2;" material="color: #f55d42"></a-entity>
+    
+            <!-- ui element -->
+            <a-entity class="clickable" color-change geometry="primitive: octahedron" scale=".2 .2 .2" position="-.8 1 -1.5" material="color: #3f51b5"></a-entity>
+            <a-entity class="clickable" color-change geometry="primitive: octahedron" scale=".2 .2 .2" position="0 1.2 -1.5" material="color: #3f51b5"></a-entity>
+            <a-entity class="clickable" color-change geometry="primitive: octahedron" scale=".2 .2 .2" position=".8 1 -1.5" material="color: #3f51b5"></a-entity>
+    
+            <!-- environment -->
+            <a-sky color="#e1f5fe"></a-sky>
+    
+        </a-scene>
     </body>
 </html>
